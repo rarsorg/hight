@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://uuo3dpsinrvp"]
+
+[ext_resource type="Script" path="res://Assets/Scripts/custom_multiplayer/test/test_custom.gd" id="1_cul3v"]
+
+[node name="TestCustom" type="Node"]
+script = ExtResource("1_cul3v")
