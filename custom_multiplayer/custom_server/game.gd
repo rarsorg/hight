@@ -3,7 +3,7 @@ class_name CustomMultiplayerGame extends RefCounted
 signal game_removed()
 signal game_emptied()
 
-signal player_joinned(network_id : int)
+signal player_joinned(network_id : int, player_advance_info : Variant)
 signal player_removed(network_id : int, reason : Variant)
 
 var game_id : int
@@ -24,7 +24,7 @@ func add_player(player : CustomMultiplayerPlayer, proxy_disconnected_reason : Va
 		players_map[player.proxy.network_id].proxy.proxy_disconnected.connect(func():
 			remove_player(player.proxy.network_id, proxy_disconnected_reason))
 		
-		player_joinned.emit(player.proxy.network_id)
+		player_joinned.emit(player.proxy.network_id, player_advance_information)
 		
 		if CustomMultiplayerServer.default_server:
 			CustomMultiplayerServer.default_server.__joinned_from_game.rpc_id(
@@ -42,8 +42,8 @@ func remove_player(network_id : int, reason : Variant) -> void:
 				players_map[network_id].proxy.is_in_game = CustomMultiplayerProxy.NOID
 				players_map[network_id].proxy = null
 			
-			player_removed.emit(network_id, reason)
 			players_map.erase(network_id)
+			player_removed.emit(network_id, reason)
 			
 			if CustomMultiplayerServer.default_server:
 				CustomMultiplayerServer.default_server.__removed_from_game.rpc_id(
